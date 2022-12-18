@@ -16,9 +16,9 @@ namespace Core.Utilities.Result.Concrete
         }
         public Result(bool success , string message) : this(success)
         {
-            Success = success;
+            Message = message;
         }
         public bool Success { get; }
-        public bool Message { get; }
+        public string Message { get; }
     }
 }
