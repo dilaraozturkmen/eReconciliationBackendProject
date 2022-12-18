@@ -12,7 +12,7 @@ namespace Business.Concrete
     {
         private readonly IAccountReconciliationDal _accountReconciliationDal;
 
-        public AccountReconciliationManager(IAccountReconciliationDal accountReconciliationDal)
+        public AccountReconciliationManager(IAccountReconciliationDal accountReconciliationDal  )
         {
             _accountReconciliationDal = accountReconciliationDal;
         }
