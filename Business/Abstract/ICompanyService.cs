@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Result.Abstract;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public class ICompanyService
+    public interface ICompanyService
     {
-        List<Company> GetList();
+        IResult Add(Company company);
+       IDataResult< List<Company>> GetList();
     }
 }

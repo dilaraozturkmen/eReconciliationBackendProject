@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Core.Utilities.Result.Concrete
 {
-    internal class ErrorResult
+    public class ErrorResult : Result
     {
+        public ErrorResult() : base(false)
+        {
+        }
+
+        public ErrorResult(string message) : base(false, message)
+        {
+        }
     }
 }
