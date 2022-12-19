@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess;
+using Core.Utilities.Result.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace DataAccess.Abstract
 {
     public interface ICompanyDal : IEntityRepository<Company>
     {
+        void UserCompanyAdd(int userId, int companyId);
         
+          
     }
 }

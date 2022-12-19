@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,34 @@ namespace WebApi.Controllers
             _authService = authService;
         }
         [HttpPost("register")]
-        public IActionResult Register(UserForRegister userForRegister)
+        public IActionResult Register(UserAndCompanyRegister userAndCompanyRegister)
+        {
+            var userExists = _authService.UserExists(userAndCompanyRegister.userForRegister.Email);
+            if (!userExists.Success)
+            {
+                return BadRequest(userExists.Message);
+
+            }
+            var companyExists = _authService.CompanyExists(userAndCompanyRegister.company);
+            if (!companyExists.Success)
+            {
+                return BadRequest(companyExists.Message);
+            }
+            var registerResult = _authService.Register(userAndCompanyRegister.userForRegister, userAndCompanyRegister.userForRegister.Password ,userAndCompanyRegister.company);
+            var result = _authService.CreateAccsesToken(registerResult.Data, registerResult.Data.CompanyId);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+
+            }
+            //if (registerResult.Success)
+            //{
+            //    return Ok(registerResult); 
+            //}
+            return BadRequest(registerResult.Message);
+        }
+        [HttpPost("registerSecondAccount")]
+        public IActionResult RegisterSecondAccount(UserForRegister userForRegister)
         {
             var userExists = _authService.UserExists(userForRegister.Email);
             if (!userExists.Success)
@@ -24,7 +52,7 @@ namespace WebApi.Controllers
                 return BadRequest(userExists.Message);
 
             }
-            var registerResult = _authService.Register(userForRegister, userForRegister.Password);
+            var registerResult = _authService.RegisterSecondAccount(userForRegister, userForRegister.Password);
             var result = _authService.CreateAccsesToken(registerResult.Data, 0);
             if (result.Success)
             {
