@@ -22,12 +22,16 @@ namespace Business.Concrete
         private readonly IUserService _userService;
         private readonly  ITokenHelper _tokenHelper;
         private readonly ICompanyService _companyService;
+        private readonly IMailService _mailService;
+        private readonly IMailParameterService _mailParameterService;
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICompanyService companyService)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, ICompanyService companyService, IMailService mailService, IMailParameterService mailParameterService)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
             _companyService = companyService;
+            _mailService = mailService;
+            _mailParameterService = mailParameterService;
         }
 
 
@@ -85,6 +89,16 @@ namespace Business.Concrete
                 PasswordSalt = user.PasswordSalt,
 
             };
+            var mailParameter = _mailParameterService.Get(3);
+            SendMailDto sendMailDto = new SendMailDto()
+            {
+                mailParameter = mailParameter.Data,
+                email = user.Email,
+                subject = "Kullanıcı onay maili",
+                body = "Kullanıcı kaydını onlayamak için aşağıdaki linke tıklamanzı gerekmektedir.",
+
+            };
+            _mailService.SendMail(sendMailDto);
             return new SuccessDataResult<UserCompanyDto>(userCompanyDto, Message.UserRegistered);
         }
         public IDataResult<User> RegisterSecondAccount(UserForRegister userForRegister, string password)
